@@ -1,24 +1,31 @@
 import tw, { styled, css } from "twin.macro";
 import useGame from "../logic/useGame";
 import Picture from "../../assets/game.png";
+import { GAME_HEIGHT, GAME_WIDTH } from "../../utils/CONSTANTS";
+import Player from "../components/Player/Player";
+import Enemy from "../components/Enemy/Enemy";
+import { Fragment } from "react";
 
 export default function Game() {
-  const { playerRef, gameViewRef, enemyRef } = useGame();
+  const { gameViewRef, enemies } = useGame();
 
   return (
     <GameView ref={gameViewRef} img={Picture}>
-      <Enemy ref={enemyRef} />
-      <Player ref={playerRef} />
+      {enemies.length > 0 &&
+        enemies.map((enemy) => (
+          <Fragment key={enemy.key}>{enemy.element}</Fragment>
+        ))}
+      <Player />
     </GameView>
   );
 }
 
 const GameView = styled.div(({ img }) => [
-  tw`bg-blue-200 m-auto h-[45rem] w-[32rem] relative overflow-hidden`,
+  tw`bg-blue-200 mx-auto mt-10 relative overflow-hidden`,
   css`
     background-image: url(${img});
     background-position: center;
+    height: ${GAME_HEIGHT}px;
+    width: ${GAME_WIDTH}px;
   `,
 ]);
-const Player = tw.div`h-32 w-16 bg-green-500 absolute bottom-0`;
-const Enemy = tw.div`h-28 w-12 bg-red-500 absolute mt-[-112px]`;
